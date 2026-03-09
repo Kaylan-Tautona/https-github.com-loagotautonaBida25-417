@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loago Kaylan Tautona 🌸</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Pacifico&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --pink:     #f472b6;
+      --pink-lt:  #fce7f3;
+      --pink-md:  #fbcfe8;
+      --purple:   #a855f7;
+      --purple-lt:#ede9fe;
+      --lavender: #e9d5ff;
+      --peach:    #fed7aa;
+      --mint:     #bbf7d0;
+      --dark:     #2d1b2e;
+      --body:     #5c3d5e;
+      --muted:    #9d7ea0;
+      --white:    #ffffff;
+      --bg:       #fff8fb;
+      --card-bg:  #fffbfd;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--pink-lt); }
+    ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 10px; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.9rem 5%;
+      background: rgba(255, 248, 251, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--pink-md);
+    }
+    .nav-logo {
+      font-family: 'Pacifico', cursive;
+      font-size: 1.25rem; color: var(--pink);
+    }
+    .nav-links { display: flex; gap: 0.4rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.88rem; font-weight: 700;
+      color: var(--muted); text-decoration: none;
+      padding: 0.4rem 0.9rem; border-radius: 20px;
+      transition: all 0.2s;
+    }
+    .nav-links a:hover { background: var(--pink-md); color: var(--pink); }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      padding: 7rem 5% 5rem;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(150deg, #fff0f7 0%, #f3e8ff 55%, #fff8fb 100%);
+      position: relative; overflow: hidden;
+    }
+    /* big blobs */
+    .blob {
+      position: absolute; border-radius: 50%; pointer-events: none; filter: blur(60px);
+    }
+    .blob1 { width: 500px; height: 500px; background: rgba(244,114,182,0.13); top: -150px; right: -150px; }
+    .blob2 { width: 350px; height: 350px; background: rgba(168,85,247,0.1);   bottom: -80px; left: -80px; }
+
+    .hero-inner {
+      display: flex; align-items: center; gap: 4rem; flex-wrap: wrap;
+      max-width: 1080px; width: 100%; position: relative; z-index: 2;
+    }
+
+    /* ── photo side ── */
+    .photo-side { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+
+    .photo-ring {
+      position: relative;
+      width: 280px; height: 280px;
+    }
+    /* gradient border ring */
+    .photo-ring::before {
+      content: '';
+      position: absolute; inset: -4px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--pink), var(--purple), #60a5fa, var(--pink));
+      background-size: 300% 300%;
+      animation: spinGrad 4s linear infinite;
+      z-index: 0;
+    }
+    @keyframes spinGrad {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .photo-inner {
+      position: relative; z-index: 1;
+      width: 100%; height: 100%; border-radius: 50%;
+      overflow: hidden; background: var(--lavender);
+      border: 4px solid white;
+    }
+    #profileImg {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      display: none;
+    }
+    .photo-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 0.5rem;
+      cursor: pointer; transition: background 0.2s;
+      text-align: center; padding: 1.5rem;
+      background: linear-gradient(135deg, #fce7f3, #ede9fe);
+    }
+    .photo-placeholder:hover { background: linear-gradient(135deg, #fbcfe8, #ddd6fe); }
+    .photo-placeholder .pp-emoji { font-size: 3rem; }
+    .photo-placeholder .pp-text { font-size: 0.82rem; font-weight: 700; color: var(--purple); line-height: 1.4; }
+    .photo-placeholder .pp-sub  { font-size: 0.72rem; color: var(--muted); }
+    #photoInput { display: none; }
+
+    /* floating emoji decorations */
+    .floaty { position: absolute; font-size: 1.5rem; z-index: 3; animation: bob 3s ease-in-out infinite; }
+    .floaty.f1 { top: -5px;  right: -10px; animation-delay: 0s;   }
+    .floaty.f2 { bottom: 5px; left: -15px; animation-delay: 1.2s; }
+    .floaty.f3 { top: 40%;  right: -22px; animation-delay: 2.4s; }
+    @keyframes bob {
+      0%,100% { transform: translateY(0) rotate(-8deg); }
+      50%      { transform: translateY(-12px) rotate(8deg); }
+    }
+
+    /* badge below photo */
+    .photo-badge {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: white; border: 2px solid var(--pink-md);
+      border-radius: 100px; padding: 0.45rem 1.1rem;
+      font-size: 0.8rem; font-weight: 700; color: var(--body);
+      box-shadow: 0 4px 12px rgba(244,114,182,0.15);
+    }
+    .photo-badge .green-dot {
+      width: 8px; height: 8px; background: #22c55e; border-radius: 50%;
+      animation: blink 1.5s ease infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── text side ── */
+    .hero-text { flex: 1; min-width: 280px; }
+    .hi-tag {
+      display: inline-block;
+      background: var(--pink-lt); color: var(--pink);
+      font-size: 0.85rem; font-weight: 800; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 0.35rem 1.1rem;
+      border-radius: 100px; margin-bottom: 1rem;
+    }
+    .hero-name {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(2rem, 4.5vw, 3.5rem);
+      color: var(--dark); line-height: 1.2; margin-bottom: 0.5rem;
+    }
+    .hero-name .accent { color: var(--purple); }
+    .hero-sub {
+      font-size: 1.02rem; font-weight: 600;
+      color: var(--muted); margin-bottom: 1.1rem;
+    }
+    .hero-desc {
+      font-size: 0.98rem; color: var(--body); line-height: 1.8;
+      max-width: 460px; margin-bottom: 1.8rem;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.8rem; }
+    .chip {
+      font-size: 0.8rem; font-weight: 700; border-radius: 100px;
+      padding: 0.35rem 1rem;
+    }
+    .c-pink   { background: var(--pink-lt);   color: var(--pink);   }
+    .c-purple { background: var(--lavender);   color: var(--purple); }
+    .c-peach  { background: var(--peach);      color: #c2410c;       }
+    .c-mint   { background: var(--mint);       color: #15803d;       }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-grad {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: white; font-family: 'Nunito', sans-serif; font-weight: 800;
+      font-size: 0.95rem; padding: 0.85rem 2rem; border-radius: 100px;
+      text-decoration: none; border: none; cursor: pointer;
+      box-shadow: 0 6px 22px rgba(244,114,182,0.38);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-grad:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(244,114,182,0.5); }
+    .btn-ring {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent; border: 2.5px solid var(--pink);
+      color: var(--pink); font-family: 'Nunito', sans-serif;
+      font-weight: 800; font-size: 0.95rem;
+      padding: 0.85rem 2rem; border-radius: 100px; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-ring:hover { background: var(--pink-lt); }
+
+    /* ─── SECTIONS SHARED ─── */
+    section { padding: 5rem 5%; }
+    .stag {
+      display: inline-block; font-size: 0.76rem; font-weight: 800;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--pink-lt); color: var(--pink);
+      padding: 0.3rem 1rem; border-radius: 100px; margin-bottom: 0.7rem;
+    }
+    h2.stitle {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+      color: var(--dark); margin-bottom: 0.8rem; line-height: 1.3;
+    }
+    .sdesc { color: var(--muted); font-size: 0.97rem; max-width: 520px; line-height: 1.75; }
+
+    /* ─── ABOUT ─── */
+    #about { background: white; }
+    .about-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; margin-top: 3rem; align-items: start; }
+
+    .about-bio p { font-size: 0.97rem; color: var(--body); line-height: 1.8; margin-bottom: 1rem; }
+    .about-bio p strong { color: var(--dark); }
+
+    .skills-block { margin-top: 1.8rem; }
+    .skills-block h3 {
+      font-size: 0.95rem; font-weight: 800; color: var(--dark);
+      margin-bottom: 1.1rem; display: flex; align-items: center; gap: 0.4rem;
+    }
+    .sk { margin-bottom: 1rem; }
+    .sk-row { display: flex; justify-content: space-between; font-size: 0.87rem; font-weight: 700; color: var(--dark); margin-bottom: 0.3rem; }
+    .sk-row span:last-child { color: var(--pink); }
+    .sk-track { height: 10px; background: var(--pink-lt); border-radius: 10px; overflow: hidden; }
+    .sk-fill {
+      height: 100%; border-radius: 10px;
+      background: linear-gradient(90deg, var(--pink), var(--purple));
+      width: 0; transition: width 1.4s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    .tool-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+    .ttag {
+      font-size: 0.78rem; font-weight: 700; padding: 0.3rem 0.9rem;
+      border-radius: 100px; border: 2px solid var(--pink-md);
+      color: var(--muted); transition: all 0.2s; cursor: default;
+    }
+    .ttag:hover { background: var(--pink-lt); color: var(--pink); border-color: var(--pink); }
+
+    /* right side cards */
+    .about-right h3 { font-size: 0.95rem; font-weight: 800; color: var(--dark); margin-bottom: 1rem; }
+    .about-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
+    .ac {
+      background: var(--bg); border: 2px solid var(--pink-md);
+      border-radius: 16px; padding: 1.1rem;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .ac:hover { transform: translateY(-4px); border-color: var(--pink); box-shadow: 0 8px 24px rgba(244,114,182,0.15); }
+    .ac .icon { font-size: 1.7rem; margin-bottom: 0.5rem; }
+    .ac h4 { font-size: 0.9rem; font-weight: 800; color: var(--dark); margin-bottom: 0.2rem; }
+    .ac p  { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+    /* fun fact strip */
+    .fun-strip {
+      margin-top: 1.5rem; background: linear-gradient(135deg, var(--pink-lt), var(--lavender));
+      border: 2px solid var(--pink-md); border-radius: 16px; padding: 1.2rem;
+    }
+    .fun-strip h4 { font-size: 0.9rem; font-weight: 800; color: var(--dark); margin-bottom: 0.6rem; }
+    .fun-strip ul { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+    .fun-strip li { font-size: 0.85rem; color: var(--body); }
+
+    /* ─── PROJECTS ─── */
+    #projects { background: linear-gradient(180deg, #fff0f7, #f3e8ff); }
+    .proj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px,1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+    .pcard {
+      background: var(--card-bg); border: 2px solid var(--pink-md);
+      border-radius: 20px; overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+    }
+    .pcard:hover { transform: translateY(-6px); box-shadow: 0 18px 44px rgba(244,114,182,0.18); border-color: var(--pink); }
+    .pcard-img {
+      height: 175px; display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .pbadge {
+      position: absolute; top: 0.7rem; right: 0.7rem;
+      font-size: 0.7rem; font-weight: 800;
+      padding: 0.25rem 0.7rem; border-radius: 100px;
+      background: white; color: var(--pink); border: 2px solid var(--pink-md);
+    }
+    .pcard-body { padding: 1.2rem; }
+    .pcard-body h3 { font-size: 0.97rem; font-weight: 800; color: var(--dark); margin-bottom: 0.4rem; }
+    .pcard-body p { font-size: 0.84rem; color: var(--muted); line-height: 1.65; margin-bottom: 0.9rem; }
+    .ptags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
+    .ptag { font-size: 0.72rem; font-weight: 700; padding: 0.25rem 0.7rem; border-radius: 100px; background: var(--lavender); color: var(--purple); }
+    .plink { font-size: 0.85rem; font-weight: 800; color: var(--pink); text-decoration: none; }
+    .plink:hover { color: var(--purple); }
+
+    /* ─── VISION ─── */
+    #vision { background: white; text-align: center; }
+    .vbox {
+      max-width: 680px; margin: 2rem auto 0;
+      background: linear-gradient(135deg, #fff0f7, #f3e8ff);
+      border: 2px solid var(--pink-md); border-radius: 24px; padding: 3rem 2.5rem;
+    }
+    .vbox .ve { font-size: 3.5rem; margin-bottom: 1rem; }
+    .vquote {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(1.2rem, 2.2vw, 1.65rem);
+      color: var(--dark); line-height: 1.55; margin-bottom: 1.2rem;
+    }
+    .vquote em { color: var(--pink); font-style: normal; }
+    .vbody { color: var(--muted); font-size: 0.95rem; line-height: 1.8; }
+    .dream-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; margin-top: 2.5rem; }
+    .dc {
+      background: white; border: 2px solid var(--pink-md); border-radius: 18px;
+      padding: 1.4rem; text-align: left;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .dc:hover { transform: translateY(-4px); border-color: var(--purple); }
+    .dc .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .dc h4 { font-size: 0.93rem; font-weight: 800; color: var(--dark); margin-bottom: 0.25rem; }
+    .dc p  { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+    /* ─── CONTACT ─── */
+    #contact { background: linear-gradient(160deg, #fff0f7, #f3e8ff); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2.5rem; }
+    .contact-info p { font-size: 0.97rem; color: var(--body); line-height: 1.75; margin-bottom: 1.4rem; }
+    .clink {
+      display: flex; align-items: center; gap: 0.9rem;
+      background: white; border: 2px solid var(--pink-md);
+      border-radius: 14px; padding: 0.9rem 1.1rem;
+      text-decoration: none; color: var(--dark); font-weight: 600;
+      margin-bottom: 0.75rem; transition: border-color 0.2s, transform 0.2s;
+    }
+    .clink:hover { border-color: var(--pink); transform: translateX(4px); }
+    .clink .ci { font-size: 1.3rem; }
+    .clink small { display: block; font-size: 0.7rem; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.1rem; }
+    .clink strong { font-size: 0.9rem; }
+
+    .cform { display: flex; flex-direction: column; gap: 1rem; }
+    .cform label { font-size: 0.8rem; font-weight: 800; color: var(--dark); display: block; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .cform input, .cform textarea {
+      width: 100%; padding: 0.8rem 1rem;
+      border: 2px solid var(--pink-md); border-radius: 12px;
+      font-family: 'Nunito', sans-serif; font-size: 0.95rem;
+      color: var(--dark); background: white; outline: none;
+      transition: border-color 0.2s;
+    }
+    .cform input:focus, .cform textarea:focus { border-color: var(--pink); }
+    .cform textarea { resize: vertical; min-height: 115px; }
+    .cform button {
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      color: white; font-family: 'Nunito', sans-serif; font-weight: 800;
+      font-size: 1rem; padding: 0.9rem; border-radius: 100px; border: none;
+      cursor: pointer; box-shadow: 0 6px 20px rgba(244,114,182,0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cform button:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(244,114,182,0.5); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: white; border-top: 2px solid var(--pink-md);
+      padding: 1.5rem 5%; display: flex;
+      justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+    .flogo { font-family: 'Pacifico', cursive; color: var(--pink); font-size: 1.1rem; }
+    footer p { font-size: 0.82rem; color: var(--muted); font-weight: 600; }
+    .fsocials { display: flex; gap: 0.5rem; }
+    .fsocials a {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--pink-lt); display: flex; align-items: center;
+      justify-content: center; font-size: 1rem; text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .fsocials a:hover { background: var(--lavender); transform: translateY(-2px); }
+
+    /* ─── FLOATING HEARTS BG ─── */
+    #particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .particle { position: absolute; animation: rise linear infinite; opacity: 0; }
+    @keyframes rise {
+      0%   { transform: translateY(100vh) rotate(0deg) scale(0.5); opacity: 0; }
+      10%  { opacity: 0.08; }
+      90%  { opacity: 0.08; }
+      100% { transform: translateY(-8vh)  rotate(360deg) scale(1.2); opacity: 0; }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 740px) {
+      .hero-inner { flex-direction: column; text-align: center; }
+      .chips, .hero-btns { justify-content: center; }
+      .hero-desc { margin: 0 auto 1.8rem; }
+      .about-grid  { grid-template-columns: 1fr; gap: 2.5rem; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .dream-row   { grid-template-columns: 1fr; }
+      .about-cards { grid-template-columns: 1fr 1fr; }
+      .nav-links   { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- particles -->
+<div id="particles"></div>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="nav-logo">Loago ✨</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#vision">Vision</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+
+  <div class="hero-inner">
+
+    <!-- photo -->
+    <div class="photo-side">
+      <div class="photo-ring">
+        <div class="photo-inner" id="photoInner">
+          <img id="profileImg" src="" alt="Loago Kaylan Tautona" />
+          <div class="photo-placeholder" id="photoPlaceholder"
+               onclick="document.getElementById('photoInput').click()">
+            <div class="pp-emoji">📸</div>
+            <div class="pp-text">Click to add<br>your photo!</div>
+            <div class="pp-sub">tap here</div>
+          </div>
+        </div>
+        <div class="floaty f1">💖</div>
+        <div class="floaty f2">✨</div>
+        <div class="floaty f3">🌸</div>
+      </div>
+      <input type="file" id="photoInput" accept="image/*" onchange="loadPhoto(event)" />
+      <div class="photo-badge">
+        <div class="green-dot"></div>
+        Open to opportunities 🇧🇼
+      </div>
+    </div>
+
+    <!-- text -->
+    <div class="hero-text">
+      <div class="hi-tag">👋 Hey there!</div>
+      <h1 class="hero-name">
+        Loago Kaylan<br>
+        <span class="accent">Tautona</span>
+      </h1>
+      <p class="hero-sub">📊 Business Intelligence &amp; Data Analytics Student</p>
+      <p class="hero-desc">
+        First-year student at <strong>Botswana Accountancy College</strong> with a passion for data, tech, and using both to build a better Botswana 🇧🇼 One dashboard at a time!
+      </p>
+      <div class="chips">
+        <span class="chip c-pink">💻 Data Analytics</span>
+        <span class="chip c-purple">📈 Power BI</span>
+        <span class="chip c-peach">🌍 Botswana</span>
+        <span class="chip c-mint">🎓 BAC 2027</span>
+      </div>
+      <div class="hero-btns">
+        <a href="#projects" class="btn-grad">See My Projects 🌸</a>
+        <a href="#contact"  class="btn-ring">Say Hello! 👋</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── ABOUT ─── -->
+<section id="about">
+  <div class="stag">✨ About Me</div>
+  <h2 class="stitle">A little about me 💜</h2>
+  <p class="sdesc">Get to know the girl behind the dashboards!</p>
+
+  <div class="about-grid">
+    <!-- left: bio + skills -->
+    <div class="about-bio">
+      <p>Hi! I'm <strong>Loago Kaylan Tautona</strong> — a young woman from Gaborone with a big dream: to use data to tell Botswana's story and help solve real problems. 💖</p>
+      <p>I'm currently in my first year studying <strong>Business Intelligence &amp; Data Analytics</strong> at Botswana Accountancy College, learning how to turn messy numbers into beautiful, useful insights.</p>
+      <p>I believe Africa's future is built by young Africans who understand data — and I want to be part of that! 🌱</p>
+
+      <div class="skills-block">
+        <h3>🛠️ My Skills <span style="font-weight:400;color:var(--muted);font-size:0.8rem;">(still growing!)</span></h3>
+        <div class="sk">
+          <div class="sk-row"><span>Microsoft Excel</span><span>75%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="75"></div></div>
+        </div>
+        <div class="sk">
+          <div class="sk-row"><span>Power BI</span><span>60%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="60"></div></div>
+        </div>
+        <div class="sk">
+          <div class="sk-row"><span>SQL</span><span>50%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="50"></div></div>
+        </div>
+        <div class="sk">
+          <div class="sk-row"><span>Python 🐍 (just starting!)</span><span>35%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="35"></div></div>
+        </div>
+        <div class="sk">
+          <div class="sk-row"><span>HTML &amp; CSS</span><span>65%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="65"></div></div>
+        </div>
+      </div>
+
+      <div class="tool-tags">
+        <span class="ttag">Power BI</span>
+        <span class="ttag">Excel</span>
+        <span class="ttag">SQL</span>
+        <span class="ttag">Python</span>
+        <span class="ttag">GitHub</span>
+        <span class="ttag">Tableau</span>
+        <span class="ttag">HTML/CSS</span>
+        <span class="ttag">Google Sheets</span>
+      </div>
+    </div>
+
+    <!-- right: personality cards -->
+    <div class="about-right">
+      <h3>💡 What makes me, me</h3>
+      <div class="about-cards">
+        <div class="ac">
+          <div class="icon">📊</div>
+          <h4>Data Lover</h4>
+          <p>I find stories hiding in spreadsheets!</p>
+        </div>
+        <div class="ac">
+          <div class="icon">🇧🇼</div>
+          <h4>Proud Motswana</h4>
+          <p>Gaborone-born, community-driven.</p>
+        </div>
+        <div class="ac">
+          <div class="icon">👩🏾‍💻</div>
+          <h4>Girls in Tech</h4>
+          <p>Inspiring more girls into STEM!</p>
+        </div>
+        <div class="ac">
+          <div class="icon">📚</div>
+          <h4>Always Learning</h4>
+          <p>New course? Yes please! 🙋🏾‍♀️</p>
+        </div>
+      </div>
+
+      <div class="fun-strip">
+        <h4>🎉 Fun Facts About Me</h4>
+        <ul>
+          <li>💅🏾 I love fashion as much as I love data</li>
+          <li>🌸 My favourite color is pink (obviously!)</li>
+          <li>📱 I could spend hours on data viz videos</li>
+          <li>🌍 Dream: Present at a TEDx in Gaborone</li>
+          <li>☕ Best ideas come with a cup of tea</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROJECTS ─── -->
+<section id="projects">
+  <div class="stag">🌸 Projects</div>
+  <h2 class="stitle">My Work &amp; Ideas 💼</h2>
+  <p class="sdesc">A mix of real projects and concepts I'm working towards — watch this space grow! 🚀</p>
+
+  <div class="proj-grid">
+
+    <!-- 1 -->
+    <div class="pcard">
+      <div class="pcard-img" style="background:linear-gradient(135deg,#fce7f3,#ede9fe);">
+        <svg viewBox="0 0 260 155" width="260" height="155">
+          <rect x="8" y="8" width="244" height="139" rx="10" fill="rgba(255,255,255,0.65)" stroke="#fbcfe8" stroke-width="1.5"/>
+          <text x="130" y="25" text-anchor="middle" fill="#9d4edd" font-size="8.5" font-family="sans-serif" font-weight="bold">🛍️ Retail Sales Dashboard</text>
+          <rect x="16" y="32" width="64" height="26" rx="7" fill="#fce7f3" stroke="#f9a8d4" stroke-width="1"/>
+          <text x="48" y="43" text-anchor="middle" fill="#db2777" font-size="6.5" font-family="sans-serif">Revenue</text>
+          <text x="48" y="54" text-anchor="middle" fill="#9d4edd" font-size="8.5" font-family="sans-serif" font-weight="bold">BWP 2.4M</text>
+          <rect x="88" y="32" width="64" height="26" rx="7" fill="#ede9fe" stroke="#c4b5fd" stroke-width="1"/>
+          <text x="120" y="43" text-anchor="middle" fill="#7c3aed" font-size="6.5" font-family="sans-serif">Growth</text>
+          <text x="120" y="54" text-anchor="middle" fill="#db2777" font-size="8.5" font-family="sans-serif" font-weight="bold">+18.4%</text>
+          <rect x="160" y="32" width="84" height="26" rx="7" fill="#fce7f3" stroke="#f9a8d4" stroke-width="1"/>
+          <text x="202" y="43" text-anchor="middle" fill="#db2777" font-size="6.5" font-family="sans-serif">Customers</text>
+          <text x="202" y="54" text-anchor="middle" fill="#9d4edd" font-size="8.5" font-family="sans-serif" font-weight="bold">1,248</text>
+          <rect x="18"  y="70" width="20" height="54" rx="4" fill="#f472b6" opacity="0.75"/>
+          <rect x="46"  y="82" width="20" height="42" rx="4" fill="#a855f7" opacity="0.7"/>
+          <rect x="74"  y="60" width="20" height="64" rx="4" fill="#f472b6" opacity="0.85"/>
+          <rect x="102" y="74" width="20" height="50" rx="4" fill="#a855f7" opacity="0.7"/>
+          <rect x="130" y="54" width="20" height="70" rx="4" fill="#f472b6"/>
+          <rect x="158" y="64" width="20" height="60" rx="4" fill="#a855f7" opacity="0.8"/>
+          <rect x="186" y="48" width="20" height="76" rx="4" fill="#f472b6"/>
+          <text x="28"  y="135" text-anchor="middle" fill="#9d7ea0" font-size="5.5" font-family="sans-serif">Jan</text>
+          <text x="56"  y="135" text-anchor="middle" fill="#9d7ea0" font-size="5.5" font-family="sans-serif">Feb</text>
+          <text x="84"  y="135" text-anchor="middle" fill="#9d7ea0" font-size="5.5" font-family="sans-serif">Mar</text>
+          <text x="112" y="135" text-anchor="middle" fill="#9d7ea0" font-size="5.5" font-family="sans-serif">Apr</text>
+          <text x="140" y="135" text-anchor="middle" fill="#9d7ea0" font-size="5.5" font-family="sans-serif">May</text>
+          <text x="168" y="135" text-anchor="middle" fill="#9d7ea0" font-size="5.5" font-family="sans-serif">Jun</text>
+          <text x="196" y="135" text-anchor="middle" fill="#9d7ea0" font-size="5.5" font-family="sans-serif">Jul</text>
+        </svg>
+        <span class="pbadge">Power BI</span>
+      </div>
+      <div class="pcard-body">
+        <h3>📊 Retail Sales Dashboard</h3>
+        <p>An interactive dashboard tracking monthly revenue and customer growth for Gaborone SMEs. Helping shop owners make smarter decisions! 🛒</p>
+        <div class="ptags"><span class="ptag">Power BI</span><span class="ptag">Excel</span><span class="ptag">DAX</span></div>
+        <a href="#" class="plink">View Project →</a>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="pcard">
+      <div class="pcard-img" style="background:linear-gradient(135deg,#ede9fe,#fce7f3);">
+        <svg viewBox="0 0 260 155" width="260" height="155">
+          <rect x="8" y="8" width="244" height="139" rx="10" fill="rgba(255,255,255,0.65)" stroke="#ddd6fe" stroke-width="1.5"/>
+          <text x="130" y="24" text-anchor="middle" fill="#7c3aed" font-size="8.5" font-family="sans-serif" font-weight="bold">👩🏾‍🎓 Girls in STEM — Botswana</text>
+          <circle cx="82" cy="93" r="40" fill="none" stroke="#fce7f3" stroke-width="14"/>
+          <circle cx="82" cy="93" r="40" fill="none" stroke="#f472b6" stroke-width="14" stroke-dasharray="100 151" stroke-dashoffset="0" transform="rotate(-90 82 93)"/>
+          <circle cx="82" cy="93" r="40" fill="none" stroke="#a855f7" stroke-width="14" stroke-dasharray="51 200" stroke-dashoffset="-100" transform="rotate(-90 82 93)"/>
+          <text x="82" y="89" text-anchor="middle" fill="#3d2c3e" font-size="13" font-family="sans-serif" font-weight="bold">67%</text>
+          <text x="82" y="101" text-anchor="middle" fill="#9d7ea0" font-size="6" font-family="sans-serif">Female Enrol.</text>
+          <rect x="142" y="52" width="9" height="9" rx="2" fill="#f472b6"/>
+          <text x="156" y="60" fill="#9d7ea0" font-size="7.5" font-family="sans-serif">Primary (66%)</text>
+          <rect x="142" y="68" width="9" height="9" rx="2" fill="#a855f7"/>
+          <text x="156" y="76" fill="#9d7ea0" font-size="7.5" font-family="sans-serif">Secondary (34%)</text>
+          <text x="196" y="100" text-anchor="middle" fill="#3d2c3e" font-size="7.5" font-family="sans-serif" font-weight="bold">STEM Trend ↗</text>
+          <polyline points="152,140 168,130 184,133 200,118 216,110 232,100 248,92" fill="none" stroke="#f472b6" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="248" cy="92" r="4" fill="#f472b6"/>
+        </svg>
+        <span class="pbadge">Research</span>
+      </div>
+      <div class="pcard-body">
+        <h3>🌸 Girls in STEM — Botswana</h3>
+        <p>Data analysis on female participation in STEM education across Botswana. Because data can help close the gender gap! 💪🏾</p>
+        <div class="ptags"><span class="ptag">Python</span><span class="ptag">Pandas</span><span class="ptag">Matplotlib</span></div>
+        <a href="#" class="plink">View Analysis →</a>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="pcard">
+      <div class="pcard-img" style="background:linear-gradient(135deg,#d1fae5,#fce7f3);">
+        <svg viewBox="0 0 260 155" width="260" height="155">
+          <rect x="8" y="8" width="244" height="139" rx="10" fill="rgba(255,255,255,0.65)" stroke="#bbf7d0" stroke-width="1.5"/>
+          <text x="130" y="23" text-anchor="middle" fill="#15803d" font-size="8" font-family="sans-serif" font-weight="bold">🌿 Gaborone Air Quality Monitor</text>
+          <text x="130" y="35" text-anchor="middle" fill="#9d7ea0" font-size="7" font-family="sans-serif">(Concept Project ✨)</text>
+          <ellipse cx="88" cy="97" rx="52" ry="42" fill="rgba(187,247,208,0.5)" stroke="#34d399" stroke-width="1.5"/>
+          <circle cx="88" cy="85" r="6"  fill="rgba(52,211,153,0.3)"  stroke="#34d399" stroke-width="1.5"/>
+          <circle cx="88" cy="85" r="3"  fill="#34d399"/>
+          <circle cx="68" cy="106" r="8" fill="rgba(245,166,35,0.3)"  stroke="#f5a623" stroke-width="1.5"/>
+          <circle cx="68" cy="106" r="3" fill="#f5a623"/>
+          <circle cx="110" cy="101" r="10" fill="rgba(244,114,182,0.3)" stroke="#f472b6" stroke-width="1.5"/>
+          <circle cx="110" cy="101" r="4" fill="#f472b6"/>
+          <rect x="158" y="48" width="90" height="100" rx="8" fill="rgba(255,255,255,0.88)" stroke="#bbf7d0" stroke-width="1"/>
+          <text x="203" y="66" text-anchor="middle" fill="#9d7ea0" font-size="7" font-family="sans-serif">Live AQI</text>
+          <text x="203" y="84" text-anchor="middle" fill="#15803d" font-size="18" font-family="sans-serif" font-weight="bold">42</text>
+          <text x="203" y="96" text-anchor="middle" fill="#15803d" font-size="7.5" font-family="sans-serif">GOOD ✅</text>
+          <line x1="166" y1="104" x2="240" y2="104" stroke="#d1fae5" stroke-width="1"/>
+          <text x="168" y="116" fill="#9d7ea0" font-size="6.5" font-family="sans-serif">Temp: 28°C</text>
+          <text x="168" y="128" fill="#9d7ea0" font-size="6.5" font-family="sans-serif">Humidity: 52%</text>
+          <text x="168" y="140" fill="#9d7ea0" font-size="6.5" font-family="sans-serif">PM2.5: 12µg</text>
+        </svg>
+        <span class="pbadge">Concept ✨</span>
+      </div>
+      <div class="pcard-body">
+        <h3>🌿 Gaborone Air Quality Monitor</h3>
+        <p>A concept real-time environmental dashboard for Gaborone — helping city planners make our capital cleaner &amp; greener! 🌱</p>
+        <div class="ptags"><span class="ptag">Tableau</span><span class="ptag">IoT</span><span class="ptag">SQL</span></div>
+        <a href="#" class="plink">View Concept →</a>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="pcard">
+      <div class="pcard-img" style="background:linear-gradient(135deg,#fef3c7,#fce7f3);">
+        <svg viewBox="0 0 260 155" width="260" height="155">
+          <rect x="8" y="8" width="244" height="139" rx="10" fill="rgba(255,255,255,0.65)" stroke="#fde68a" stroke-width="1.5"/>
+          <text x="130" y="23" text-anchor="middle" fill="#92400e" font-size="8" font-family="sans-serif" font-weight="bold">🧠 BAC Student Wellness Survey</text>
+          <rect x="16" y="32" width="148" height="88" rx="6" fill="rgba(255,255,255,0.55)" stroke="#fde68a" stroke-width="1"/>
+          <polyline points="26,108 46,88 66,94 86,73 106,66 126,53 154,46" fill="none" stroke="#f472b6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline points="26,112 46,109 66,105 86,102 106,98 126,95 154,90" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4,3"/>
+          <circle cx="154" cy="46" r="4" fill="#f472b6"/>
+          <text x="26" y="45" fill="#9d7ea0" font-size="6.5" font-family="sans-serif">Wellness Score</text>
+          <text x="22"  y="132" fill="#9d7ea0" font-size="6.5" font-family="sans-serif">Sem1</text>
+          <text x="62"  y="132" fill="#9d7ea0" font-size="6.5" font-family="sans-serif">Sem2</text>
+          <text x="102" y="132" fill="#9d7ea0" font-size="6.5" font-family="sans-serif">Sem3</text>
+          <text x="142" y="132" fill="#9d7ea0" font-size="6.5" font-family="sans-serif">Sem4</text>
+          <rect x="178" y="32" width="74" height="88" rx="8" fill="rgba(255,243,199,0.88)" stroke="#fde68a" stroke-width="1"/>
+          <text x="215" y="52"  text-anchor="middle" fill="#9d7ea0" font-size="7"  font-family="sans-serif">Students</text>
+          <text x="215" y="70"  text-anchor="middle" fill="#3d2c3e" font-size="15" font-family="sans-serif" font-weight="bold">342</text>
+          <line x1="186" y1="78" x2="244" y2="78" stroke="#fde68a" stroke-width="1"/>
+          <text x="215" y="94"  text-anchor="middle" fill="#9d7ea0" font-size="7"  font-family="sans-serif">Avg Score</text>
+          <text x="215" y="110" text-anchor="middle" fill="#f472b6" font-size="13" font-family="sans-serif" font-weight="bold">7.2/10</text>
+        </svg>
+        <span class="pbadge">SQL + Python</span>
+      </div>
+      <div class="pcard-body">
+        <h3>💛 BAC Student Wellness Analytics</h3>
+        <p>Survey data on mental health &amp; academic performance at BAC. Using data to advocate for better student support! 💆🏾‍♀️</p>
+        <div class="ptags"><span class="ptag">Python</span><span class="ptag">SQL</span><span class="ptag">Surveys</span></div>
+        <a href="#" class="plink">View Project →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ─── VISION ─── -->
+<section id="vision">
+  <div style="text-align:center;">
+    <div class="stag">💭 My Vision</div>
+    <h2 class="stitle">My Big Dream 🌍</h2>
+  </div>
+
+  <div class="vbox">
+    <div class="ve">💖</div>
+    <div class="vquote">
+      "I want to use data to show <em>Botswana's story</em> —<br>so we can build a better one, together."
+    </div>
+    <p class="vbody">
+      I'm just starting out, but I have big dreams. Africa is the world's youngest continent and I believe young African women like me have a huge role to play in shaping its future through technology. I want to learn, grow, and one day give back by mentoring the next generation of girls in tech. 🌸
+    </p>
+  </div>
+
+  <div class="dream-row">
+    <div class="dc">
+      <div class="icon">🌱</div>
+      <h4>Data for Botswana</h4>
+      <p>Using analytics to tackle real challenges in healthcare, education, and business across Botswana.</p>
+    </div>
+    <div class="dc">
+      <div class="icon">👩🏾‍💻</div>
+      <h4>Inspire Girls in Tech</h4>
+      <p>Showing younger girls there's a place for them in tech — coding is cool AND creative!</p>
+    </div>
+    <div class="dc">
+      <div class="icon">📡</div>
+      <h4>Smart Gaborone</h4>
+      <p>Dreaming of a data-driven Gaborone where public services are optimised with real-time intelligence.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section id="contact">
+  <div class="stag">💌 Contact</div>
+  <h2 class="stitle">Let's Connect! 🌸</h2>
+  <p class="sdesc">Recruiter, classmate, or fellow tech lover — I'd love to hear from you!</p>
+
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p>I'm always open to internship opportunities, group projects, or just a friendly chat about data and tech in Africa. Don't be shy! 💜</p>
+      <a href="mailto:loagotautona@gmail.com" class="clink">
+        <span class="ci">✉️</span>
+        <div><small>Email</small><strong>loagotautona@gmail.com</strong></div>
+      </a>
+      <a href="https://www.linkedin.com/in/Loago_Tautona" target="_blank" class="clink">
+        <span class="ci">💼</span>
+        <div><small>LinkedIn</small><strong>Loago_Tautona</strong></div>
+      </a>
+      <a href="https://github.com/loagotautona" target="_blank" class="clink">
+        <span class="ci">🐙</span>
+        <div><small>GitHub</small><strong>github.com/loagotautona</strong></div>
+      </a>
+      <a href="#" class="clink">
+        <span class="ci">📍</span>
+        <div><small>Location</small><strong>Gaborone, Botswana 🇧🇼</strong></div>
+      </a>
+    </div>
+
+    <form class="cform" action="https://formspree.io/f/your-form-id" method="POST">
+      <div>
+        <label>Your Name 😊</label>
+        <input type="text" name="name" placeholder="What's your name?" required />
+      </div>
+      <div>
+        <label>Your Email 📧</label>
+        <input type="email" name="email" placeholder="your@email.com" required />
+      </div>
+      <div>
+        <label>Your Message 💬</label>
+        <textarea name="message" placeholder="Say hi! I don't bite 😄" required></textarea>
+      </div>
+      <button type="submit">Send Message 💌</button>
+    </form>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="flogo">Loago ✨</div>
+  <p>© 2025 Loago Kaylan Tautona · Made with 💖 in Gaborone, Botswana 🇧🇼</p>
+  <div class="fsocials">
+    <a href="https://www.linkedin.com/in/Loago_Tautona" target="_blank" title="LinkedIn">💼</a>
+    <a href="https://github.com/loagotautona"           target="_blank" title="GitHub">🐙</a>
+    <a href="mailto:loagotautona@gmail.com"                              title="Email">✉️</a>
+  </div>
+</footer>
+
+<script>
+/* ── PHOTO UPLOAD ── */
+function loadPhoto(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = document.getElementById('profileImg');
+    img.src = ev.target.result;
+    img.style.display = 'block';
+    document.getElementById('photoPlaceholder').style.display = 'none';
+    // save to localStorage so it persists on refresh
+    try { localStorage.setItem('loago_photo', ev.target.result); } catch(e){}
+  };
+  reader.readAsDataURL(file);
+}
+
+// restore photo on page load
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    const saved = localStorage.getItem('loago_photo');
+    if (saved) {
+      const img = document.getElementById('profileImg');
+      img.src = saved;
+      img.style.display = 'block';
+      document.getElementById('photoPlaceholder').style.display = 'none';
+    }
+  } catch(e){}
+});
+
+/* ── SKILL BARS ── */
+const fills = document.querySelectorAll('.sk-fill');
+const skObs = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) {
+      en.target.style.width = en.target.dataset.w + '%';
+      skObs.unobserve(en.target);
+    }
+  });
+}, { threshold: 0.4 });
+fills.forEach(f => skObs.observe(f));
+
+/* ── CARD FADE-IN ── */
+const cards = document.querySelectorAll('.pcard, .ac, .dc');
+const cObs  = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) {
+      en.target.style.opacity = '1';
+      en.target.style.transform = 'translateY(0)';
+      cObs.unobserve(en.target);
+    }
+  });
+}, { threshold: 0.1 });
+cards.forEach((c, i) => {
+  c.style.opacity   = '0';
+  c.style.transform = 'translateY(22px)';
+  c.style.transition = `opacity 0.55s ease ${i * 0.06}s, transform 0.55s ease ${i * 0.06}s, box-shadow 0.25s, border-color 0.25s`;
+  cObs.observe(c);
+});
+
+/* ── FLOATING PARTICLES ── */
+const wrap    = document.getElementById('particles');
+const symbols = ['💖','🌸','✨','💜','🌷','⭐','💕','🦋','🎀','🌺'];
+symbols.forEach((s, i) => {
+  for (let j = 0; j < 2; j++) {
+    const el = document.createElement('div');
+    el.className   = 'particle';
+    el.textContent = s;
+    el.style.cssText = `
+      left: ${Math.random() * 100}%;
+      font-size: ${(Math.random() * 0.9 + 0.6).toFixed(2)}rem;
+      animation-duration: ${(Math.random() * 14 + 10).toFixed(1)}s;
+      animation-delay:    ${(Math.random() * 20).toFixed(1)}s;
+    `;
+    wrap.appendChild(el);
+  }
+});
+</script>
+</body>
+</html>
